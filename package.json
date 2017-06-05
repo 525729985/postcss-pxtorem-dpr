@@ -1,0 +1,28 @@
+{
+  "name": "postcss-pxtorem-dpr",
+  "description": "A CSS post-processor that converts px to rem.",
+  "version": "0.0.2",
+  "author": "xu",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "start": "node spec/test.js",
+    "test": "jasmine-node spec"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.11.0"
+  },
+  "keywords": [
+    "css",
+    "rem",
+    "pixel",
+    "px",
+    "postcss",
+    "postcss-plugin"
+  ],
+  "dependencies": {
+    "bson": "^1.0.4",
+    "object-assign": "^4.1.0",
+    "postcss": "^5.2.10"
+  }
+}
