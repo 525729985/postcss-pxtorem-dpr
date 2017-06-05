@@ -12,7 +12,8 @@ var defaults = {
     propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
     baseDpr: 2,
     dprArray: [2, 3],
-    dprPropList: ['font', 'font-size'],
+    forcePxComment: 'px',
+    keepComment: false,
     replace: true,
     mediaQuery: false,
     minPixelValue: 0
@@ -35,21 +36,24 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
     var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue);
     var getDprValue = createDprReplace(opts.dprArray, opts.baseDpr, opts.unitPrecision, opts.minPixelValue);
 
-    var dprPropList = createPropListMatcher(opts.dprPropList);
     var satisfyPropList = createPropListMatcher(opts.propList);
 
     return function (css) {
-        const newRules = [];
+        var newRules = [];
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations
             if (decl.value.indexOf('px') === -1) return;
 
             if (!satisfyPropList(decl.prop)) return;
             if (blacklistedSelector(opts.selectorBlackList, decl.parent.selector)) return;
-            var isDprProp = dprPropList(decl.prop);
+            var next = decl.next();
+            var isDprProp = next && next.type === 'comment' && /px/.test(next.text);
+            if(isDprProp && !opts.keepComment){
+                next.remove();
+            }
             var value, dprValues;
             if(isDprProp){
-                dprValues = getDprValue(pxRegex, decl.value);
+                dprValues = getDprValue(pxRegex, decl.value) || decl.next().type === 'comment';
                 value = dprValues.shift();
             }else{
                 value = decl.value.replace(pxRegex, pxReplace);
@@ -64,7 +68,10 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
             }
             if(isDprProp){
                 opts.dprArray.forEach(function(dpr, index){
-                    var rule = postcss.rule({ selector: '[data-dpr="' + dpr + '"] ' + decl.parent.selector });
+                    var selector = decl.parent.selector.split(',').map(function(selector){
+                        return '[data-dpr="' + dpr + '"] ' + selector;
+                    }).join(',')
+                    var rule = postcss.rule({ selector: selector });
                     rule.append({ prop: decl.prop, value: dprValues[index] });
                     newRules.push(rule);
                 });

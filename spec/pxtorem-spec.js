@@ -8,12 +8,12 @@
 'use strict';
 var postcss = require('postcss');
 var pxtorem = require('..');
-var basicCSS = '.rule { font-size: 15px }';
+var basicCSS = '.rule { font-size: 15px/*px*/ }';
 var filterPropList = require('../lib/filter-prop-list');
 
 describe('pxtorem', function () {
     it('should work on the readme example', function () {
-        var input = 'h1 { margin: 0 0 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
+        var input = 'h1 { margin: 0 0 20px; font-size: 32px;/*px*/ line-height: 1.2; letter-spacing: 1px; }';
         var output = 'h1 { margin: 0 0 20px; font-size: 16px; line-height: 1.2; letter-spacing: 0.0625rem; }\n[data-dpr="2"] h1 { font-size: 32px; }\n[data-dpr="3"] h1 { font-size: 48px; }';
         var processed = postcss(pxtorem()).process(input).css;
         expect(processed).toBe(output);

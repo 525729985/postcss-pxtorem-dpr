@@ -1,14 +1,15 @@
 {
   "name": "postcss-pxtorem-dpr",
   "description": "A CSS post-processor that converts px to rem.",
-  "version": "0.0.2",
+  "version": "0.1.2",
   "homepage": "https://github.com/525729985/postcss-pxtorem-dpr",
   "author": "xu",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "start": "node spec/test.js",
-    "test": "jasmine-node spec"
+    "test": "jasmine-node spec",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",

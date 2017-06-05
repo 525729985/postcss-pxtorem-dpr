@@ -13,7 +13,7 @@ $ npm install postcss-pxtorem-dpr --save-dev
 // input
 h1 {
     margin: 0 0 20px;
-    font-size: 32px;
+    font-size: 32px;/*px*/
     line-height: 1.2;
     letter-spacing: 1px;
 }
@@ -65,7 +65,8 @@ Default:
     propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
     baseDpr: 2,
     dprArray: [2, 3],
-    dprPropList: ['font', 'font-size'],
+    forcePxComment: 'px',
+    keepComment: false,
     selectorBlackList: [],
     replace: true,
     mediaQuery: false,
