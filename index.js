@@ -9,8 +9,9 @@ var defaults = {
     rootValue: 16,
     unitPrecision: 5,
     selectorBlackList: [],
-    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
-    baseDpr: 2,
+    propList: ['*', '!html', '!body', 'border-radius', '!border',],
+    dprPropList: ['font*']
+    baseDpr: null,
     dprArray: [2, 3],
     forcePxComment: 'px',
     keepComment: false,
@@ -29,38 +30,45 @@ var legacyOptions = {
 };
 
 module.exports = postcss.plugin('postcss-pxtorem', function (options) {
-
     convertLegacyOptions(options);
 
     var opts = objectAssign({}, defaults, options);
     var pxReplace = createPxReplace(opts.rootValue, opts.unitPrecision, opts.minPixelValue);
-    var getDprValue = createDprReplace(opts.dprArray, opts.baseDpr, opts.unitPrecision, opts.minPixelValue);
+		var baseDpr = opts.baseDpr || Math.ceil(opts.rootValue/ 37.5);
+		if(opts.dprArray[0] !== 1 && baseDpr !== 1){
+				// 默认dpr不为1,追加dpr1尺寸
+				opts.dprArray.unshift(1);
+		}
+    var getDprValue = createDprReplace(opts.dprArray, baseDpr, opts.unitPrecision, opts.minPixelValue);
 
     var satisfyPropList = createPropListMatcher(opts.propList);
+    var dprPropList = createPropListMatcher(opts.dprPropList);
 
     return function (css) {
         var newRules = [];
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations
             if (decl.value.indexOf('px') === -1) return;
-
-            if (!satisfyPropList(decl.prop)) return;
+						var inDprPropList = dprPropList(decl.prop);
+            if (!satisfyPropList(decl.prop) && !inDprPropList) return;
             if (blacklistedSelector(opts.selectorBlackList, decl.parent.selector)) return;
             var next = decl.next();
-            var isDprProp = next && next.type === 'comment' && /px/.test(next.text);
-            if(isDprProp && !opts.keepComment){
-                next.remove();
-            }
+            var isDprProp = inDprPropList;
+						if(next && next.type === 'comment' && /px/.test(next.text)){
+							isDprProp = true;
+							if(!opts.keepComment){
+									next.remove();
+							}
+						}
             var value, dprValues;
             if(isDprProp){
-                dprValues = getDprValue(pxRegex, decl.value) || decl.next().type === 'comment';
-                value = dprValues.shift();
+                dprValues = getDprValue(pxRegex, decl.value);
+                value = dprValues[0];
             }else{
                 value = decl.value.replace(pxRegex, pxReplace);
+                if (declarationExists(decl.parent, decl.prop, value)) return;
             }
             // if rem unit already exists, do not add or replace
-            if (declarationExists(decl.parent, decl.prop, value)) return;
-
             if (opts.replace) {
                 decl.value = value;
             } else {
@@ -68,6 +76,9 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
             }
             if(isDprProp){
                 opts.dprArray.forEach(function(dpr, index){
+                    if(index === 0){
+                      return;
+                    }
                     var selector = decl.parent.selector.split(',').map(function(selector){
                         return '[data-dpr="' + dpr + '"] ' + selector;
                     }).join(',')
@@ -123,10 +134,6 @@ function createDprReplace(dprArray, baseDpr, unitPrecision, minPixelValue){
     return function (m, $1) {
         if (!$1) return m;
         var pixels = parseFloat($1);
-        if(dprArray[0] !== 1){
-            // arr[0]返回dpr1尺寸
-            dprArray = [1].concat(dprArray);
-        }
         return dprArray.map(function(dpr){
             var fixedVal = toFixed(pixels / baseDpr * dpr, unitPrecision);
             return (fixedVal === 0) ? '0' : fixedVal + 'px';

@@ -62,12 +62,13 @@ Default:
 {
     rootValue: 16,
     unitPrecision: 5,
-    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
-    baseDpr: 2,
+    selectorBlackList: [],
+    propList: ['*', '!html', '!body', 'border-radius', '!border'],
+    dprPropList: ['font*'] // 匹配属性自动加/*px*/效果
+    baseDpr: null, // 如果为空则通过rootValue计算
     dprArray: [2, 3],
     forcePxComment: 'px',
     keepComment: false,
-    selectorBlackList: [],
     replace: true,
     mediaQuery: false,
     minPixelValue: 0
