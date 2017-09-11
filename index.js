@@ -10,7 +10,7 @@ var defaults = {
     unitPrecision: 5,
     selectorBlackList: [],
     propList: ['*', '!html', '!body', 'border-radius', '!border',],
-    dprPropList: ['font*']
+    dprPropList: ['font*'],
     baseDpr: null,
     dprArray: [2, 3],
     forcePxComment: 'px',

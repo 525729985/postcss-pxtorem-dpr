@@ -1,7 +1,7 @@
 {
   "name": "postcss-pxtorem-dpr",
   "description": "A CSS post-processor that converts px to rem.",
-  "version": "0.1.2",
+  "version": "0.1.7",
   "homepage": "https://github.com/525729985/postcss-pxtorem-dpr",
   "author": "xu",
   "license": "MIT",
@@ -30,5 +30,7 @@
     "bson": "^1.0.4",
     "object-assign": "^4.1.0",
     "postcss": "^5.2.10"
-  }
+  },
+  "_from": "postcss-pxtorem-dpr@0.1.2",
+  "_resolved": "http://registry.npm.taobao.org/postcss-pxtorem-dpr/download/postcss-pxtorem-dpr-0.1.2.tgz"
 }
