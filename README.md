@@ -9,7 +9,6 @@ A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and ge
 
 ## postcss-adaptive
 
-* [amfe-flexible](https://github.com/amfe/lib-flexible)
 * [postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
 
 [npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
@@ -66,6 +65,7 @@ Set rem unit and hairline class. For example:
   }
 }) (window, document);
 ```
+Or use [amfe-flexible](https://github.com/amfe/lib-flexible)
 
 ## Usage
 
