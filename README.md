@@ -2,13 +2,13 @@
 
 A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and generates adaptive css code, such as `rem` and `0.5px borders for retina devices`.
 
-## postcss-adaptive
-* [postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
-
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
+
+## postcss-adaptive
+* [postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
 
 [npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/postcss-adaptive
