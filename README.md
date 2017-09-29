@@ -1,5 +1,4 @@
 # postcss-pxtorem-dpr
-
 A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and generates adaptive css code, such as `rem` and `0.5px borders for retina devices`.
 
 [![NPM version][npm-image]][npm-url]
