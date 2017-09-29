@@ -112,11 +112,11 @@ Config:
 * `hairlineClass`: string, class name of 1px border (default 'hairlines')
 * `autoRem`: boolean, whether to transform to rem unit (default: true)
 * `pxPropList`: array, The properties that can change from rem to px (default: ['font*', 'border*', '!border-radius'])
-    - Values need to be exact matches.
-    - Use wildcard `*` to enable all properties. Example: `['*']`
-    - Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
-    - Use `!` to not match a property. Example: `['*', '!letter-spacing']`
-    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']`
+    * Values need to be exact matches.
+    * Use wildcard `*` to enable all properties. Example: `['*']`
+    * Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
+    * Use `!` to not match a property. Example: `['*', '!letter-spacing']`
+    * Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']`
 ## License
 
 MIT
