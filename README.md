@@ -7,15 +7,15 @@ A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and ge
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
 
-* [postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
-* [npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
-* [npm-url]: https://npmjs.org/package/postcss-adaptive
-* [travis-image]: https://img.shields.io/travis/songsiqi/postcss-adaptive.svg?style=flat-square
-* [travis-url]: https://travis-ci.org/songsiqi/postcss-adaptive
-* [coveralls-image]: https://img.shields.io/coveralls/songsiqi/postcss-adaptive.svg?style=flat-square
-* [coveralls-url]: https://coveralls.io/r/songsiqi/postcss-adaptive
-* [downloads-image]: http://img.shields.io/npm/dm/postcss-adaptive.svg?style=flat-square
-* [downloads-url]: https://npmjs.org/package/postcss-adaptive
+[postcss-adaptive]: https://github.com/songsiqi/postcss-adaptive
+[npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/postcss-adaptive
+[travis-image]: https://img.shields.io/travis/songsiqi/postcss-adaptive.svg?style=flat-square
+[travis-url]: https://travis-ci.org/songsiqi/postcss-adaptive
+[coveralls-image]: https://img.shields.io/coveralls/songsiqi/postcss-adaptive.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/songsiqi/postcss-adaptive
+[downloads-image]: http://img.shields.io/npm/dm/postcss-adaptive.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/postcss-adaptive
 
 ## Table of Contents
 
@@ -109,107 +109,6 @@ Config:
 * `remPrecision`: number, rem value precision (default: 6)
 * `hairlineClass`: string, class name of 1px border (default 'hairlines')
 * `autoRem`: boolean, whether to transform to rem unit (default: autoRem)
-
-#### Node
-
-```shell
-npm install postcss-adaptive
-```
-
-```javascript
-var postcss = require('postcss');
-var adaptive = require('postcss-adaptive');
-var originCssText = '...';
-var newCssText = postcss().use(adaptive({ remUnit: 75 })).process(originCssText).css;
-```
-
-#### Gulp
-
-```javascript
-var gulp = require('gulp');
-var postcss = require('gulp-postcss');
-var adaptive = require('postcss-adaptive');
-
-gulp.task('default', function () {
-  var processors = [adaptive({ remUnit: 75 })];
-  return gulp.src('./src/*.css')
-    .pipe(postcss(processors))
-    .pipe(gulp.dest('./dest'));
-});
-```
-
-#### Webpack
-
-```javascript
-var adaptive = require('postcss-adaptive');
-
-module.exports = {
-  module: {
-    loaders: [
-      {
-        test: /\.css$/,
-        loader: "style-loader!css-loader!postcss-loader"
-      }
-    ]
-  },
-  postcss: function () {
-    return [adaptive({ remUnit: 75 })];
-  }
-}
-```
-
-#### Grunt
-
-```javascript
-module.exports = function (grunt) {
-  grunt.initConfig({
-    postcss: {
-      options: {
-        processors: [
-          adaptive({ remUnit: 75 })
-        ]
-      },
-      dist: {
-        src: 'src/*.css',
-        dest: 'build'
-      }
-    }
-  });
-  grunt.loadNpmTasks('grunt-postcss');
-  grunt.registerTask('default', ['postcss']);
-}
-```
-
-## Changelog
-
-### 0.4.0
-
-* Do not generate `hairline` when the declaration is commented with `/*no*/`.
-
-### 0.3.2
-
-* Upgrade postcss version to 6.x.
-* The value below 1px will not transfer to rem.
-
-### 0.3.1
-
-* Delete `minify` option, please use other postcss plugins like `cssnano` instead.
-
-### 0.3.0
-
-* Support `minify` option to minify the output css code.
-
-### 0.2.0
-
-* Support `autoRem` option.
-
-### 0.1.4
-
-* Support `/*no*/` comment.
-
-### 0.1.0
-
-* First release.
 
 ## License
 
