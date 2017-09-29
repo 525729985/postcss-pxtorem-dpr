@@ -1,4 +1,5 @@
 # postcss-pxtorem-dpr
+
 A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and generates adaptive css code, such as `rem` and `0.5px borders for retina devices`.
 
 [![NPM version][npm-image]][npm-url]
@@ -109,7 +110,7 @@ Config:
 * `baseDpr`: number, base device pixel ratio (default: 2)
 * `remPrecision`: number, rem value precision (default: 6)
 * `hairlineClass`: string, class name of 1px border (default 'hairlines')
-* `autoRem`: boolean, whether to transform to rem unit (default: autoRem)
+* `autoRem`: boolean, whether to transform to rem unit (default: true)
 
 ## License
 
