@@ -1,130 +1,216 @@
-## Install
+# postcss-pxtorem-dpr
 
-```shell
-$ npm install postcss-pxtorem-dpr --save-dev
+A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and generates adaptive css code, such as `rem` and `0.5px borders for retina devices`.
+
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Downloads][downloads-image]][downloads-url]
+
+[postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
+[npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/postcss-adaptive
+[travis-image]: https://img.shields.io/travis/songsiqi/postcss-adaptive.svg?style=flat-square
+[travis-url]: https://travis-ci.org/songsiqi/postcss-adaptive
+[coveralls-image]: https://img.shields.io/coveralls/songsiqi/postcss-adaptive.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/songsiqi/postcss-adaptive
+[downloads-image]: http://img.shields.io/npm/dm/postcss-adaptive.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/postcss-adaptive
+
+## Table of Contents
+
+* [Requirements](#requirements)
+* [Usage](#usage)
+* [Changelog](#changelog)
+* [License](#license)
+
+## Requirements
+
+Set rem unit and hairline class. For example:
+
+```javascript
+(function (win, doc) {
+  var docEl = doc.documentElement;
+
+  function setRemUnit () {
+    var docWidth = docEl.clientWidth;
+    var rem = docWidth / 10;
+    docEl.style.fontSize = rem + 'px';
+  }
+
+  win.addEventListener('resize', function () {
+    setRemUnit();
+  }, false);
+  win.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+      setRemUnit();
+    }
+  }, false);
+
+  setRemUnit();
+
+  if (win.devicePixelRatio && win.devicePixelRatio >= 2) {
+    var testEl = doc.createElement('div');
+    var fakeBody = doc.createElement('body');
+    testEl.style.border = '0.5px solid transparent';
+    fakeBody.appendChild(testEl);
+    docEl.appendChild(fakeBody);
+    if (testEl.offsetHeight === 1) {
+      docEl.classList.add('hairlines');
+    }
+    docEl.removeChild(fakeBody);
+  }
+}) (window, document);
 ```
 
+## Usage
 
-### Input/Output
+The raw stylesheet only contains @2x style, and if you
 
-*With the default settings, only font related properties are targeted.*
+* intend to use `rem` unit，add `/*rem*/` after the declaration
+* don't intend to transform the original value, add `/*no*/` after the declaration
+* intend to use `px` unit when `autoRem` is set to `true`, add `/*px*/` after the declaration
+
+**Attention: Dealing with SASS or LESS, only `/*...*/` comment can be used, in order to have the comments persisted.**
+
+Before processing:
 
 ```css
-// input
-h1 {
-    margin: 0 0 20px;
-    font-size: 32px;/*px*/
-    line-height: 1.2;
-    letter-spacing: 1px;
+.selector {
+  height: 64px;
+  width: 150px; /*rem*/
+  padding: 10px; /*no*/
+  border-top: 1px solid #ddd;
 }
-
-// output
-h1 { 
-    margin: 0 0 20px; 
-    font-size: 16px; 
-    line-height: 1.2; 
-    letter-spacing: 0.0625rem; 
-}
-[data-dpr="2"] h1 { 
-    font-size: 32px; 
-}
-[data-dpr="3"] h1 { 
-    font-size: 48px; 
-}
-        
 ```
 
-### Example
+After processing:
 
-```js
-var fs = require('fs');
+```css
+.selector {
+  height: 32px;
+  width: 2rem;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+.hairlines .selector {
+  border-top: 0.5px solid #ddd;
+}
+```
+
+### API
+
+`adaptive(config)`
+
+Config: 
+
+* `remUnit`: number, rem unit value (default: 75)
+* `baseDpr`: number, base device pixel ratio (default: 2)
+* `remPrecision`: number, rem value precision (default: 6)
+* `hairlineClass`: string, class name of 1px border (default 'hairlines')
+* `autoRem`: boolean, whether to transform to rem unit (default: autoRem)
+
+#### Node
+
+```shell
+npm install postcss-adaptive
+```
+
+```javascript
 var postcss = require('postcss');
-var pxtorem = require('postcss-pxtorem');
-var css = fs.readFileSync('main.css', 'utf8');
-var options = {
-    replace: false
-};
-var processedCss = postcss(pxtorem(options)).process(css).css;
-
-fs.writeFile('main-rem.css', processedCss, function (err) {
-  if (err) {
-    throw err;
-  }
-  console.log('Rem file written.');
-});
+var adaptive = require('postcss-adaptive');
+var originCssText = '...';
+var newCssText = postcss().use(adaptive({ remUnit: 75 })).process(originCssText).css;
 ```
 
-### options
+#### Gulp
 
-Type: `Object | Null`  
-Default:
-```js
-{
-    rootValue: 16,
-    unitPrecision: 5,
-    selectorBlackList: [],
-    propList: ['*', '!html', '!body', 'border-radius', '!border'],
-    dprPropList: ['font*'] // 匹配属性自动加/*px*/效果
-    baseDpr: null, // 如果为空则通过rootValue计算
-    dprArray: [2, 3],
-    forcePxComment: 'px',
-    keepComment: false,
-    replace: true,
-    mediaQuery: false,
-    minPixelValue: 0
-}
-```
-
-- `rootValue` (Number) The root element font size.
-- `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
-- `propList` (Array) The properties that can change from px to rem.
-    - Values need to be exact matches.
-    - Use wildcard `*` to enable all properties. Example: `['*']`
-    - Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
-    - Use `!` to not match a property. Example: `['*', '!letter-spacing']`
-    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']` 
-- `selectorBlackList` (Array) The selectors to ignore and leave as px.
-    - If value is string, it checks to see if selector contains the string.
-        - `['body']` will match `.body-class`
-    - If value is regexp, it checks to see if the selector matches the regexp.
-        - `[/^body$/]` will match `body` but not `.body`
-- `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
-- `mediaQuery` (Boolean) Allow px to be converted in media queries.
-- `minPixelValue` (Number) Set the minimum pixel value to replace.
-
-
-### Use with gulp-postcss and autoprefixer
-
-```js
+```javascript
 var gulp = require('gulp');
 var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer');
-var pxtorem = require('postcss-pxtorem');
+var adaptive = require('postcss-adaptive');
 
-gulp.task('css', function () {
-
-    var processors = [
-        autoprefixer({
-            browsers: 'last 1 version'
-        }),
-        pxtorem({
-            replace: false
-        })
-    ];
-
-    return gulp.src(['build/css/**/*.css'])
-        .pipe(postcss(processors))
-        .pipe(gulp.dest('build/css'));
+gulp.task('default', function () {
+  var processors = [adaptive({ remUnit: 75 })];
+  return gulp.src('./src/*.css')
+    .pipe(postcss(processors))
+    .pipe(gulp.dest('./dest'));
 });
 ```
 
-### A message about ignoring properties
-Currently, the easiest way to have a single property ignored is to use a capital in the pixel unit declaration.
+#### Webpack
 
-// `Px` or `PX` is ignored by `postcss-pxtorem` but still accepted by browsers
-```js
-.ignore {
-    border: 1Px solid; // ignored
-    border-width: 2PX; // ignored
+```javascript
+var adaptive = require('postcss-adaptive');
+
+module.exports = {
+  module: {
+    loaders: [
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader!postcss-loader"
+      }
+    ]
+  },
+  postcss: function () {
+    return [adaptive({ remUnit: 75 })];
+  }
 }
 ```
+
+#### Grunt
+
+```javascript
+module.exports = function (grunt) {
+  grunt.initConfig({
+    postcss: {
+      options: {
+        processors: [
+          adaptive({ remUnit: 75 })
+        ]
+      },
+      dist: {
+        src: 'src/*.css',
+        dest: 'build'
+      }
+    }
+  });
+  grunt.loadNpmTasks('grunt-postcss');
+  grunt.registerTask('default', ['postcss']);
+}
+```
+
+## Changelog
+
+### 0.4.0
+
+* Do not generate `hairline` when the declaration is commented with `/*no*/`.
+
+### 0.3.2
+
+* Upgrade postcss version to 6.x.
+* The value below 1px will not transfer to rem.
+
+### 0.3.1
+
+* Delete `minify` option, please use other postcss plugins like `cssnano` instead.
+
+### 0.3.0
+
+* Support `minify` option to minify the output css code.
+
+### 0.2.0
+
+* Support `autoRem` option.
+
+### 0.1.4
+
+* Support `/*no*/` comment.
+
+### 0.1.0
+
+* First release.
+
+## License
+
+MIT
