@@ -111,6 +111,7 @@ Config:
 * `remPrecision`: number, rem value precision (default: 6)
 * `hairlineClass`: string, class name of 1px border (default 'hairlines')
 * `autoRem`: boolean, whether to transform to rem unit (default: true)
+* `pxPropList`: (default: ['font*', 'border*', '!border-radius'])
 
 ## License
 
