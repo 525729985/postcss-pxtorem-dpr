@@ -8,6 +8,8 @@ A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and ge
 [![Downloads][downloads-image]][downloads-url]
 
 ## postcss-adaptive
+
+* [amfe-flexible](https://github.com/amfe/lib-flexible)
 * [postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
 
 [npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
