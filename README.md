@@ -7,15 +7,15 @@ A [postcss](https://www.npmjs.com/package/postcss) plugin that calculates and ge
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
 
-[postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
-[npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/postcss-adaptive
-[travis-image]: https://img.shields.io/travis/songsiqi/postcss-adaptive.svg?style=flat-square
-[travis-url]: https://travis-ci.org/songsiqi/postcss-adaptive
-[coveralls-image]: https://img.shields.io/coveralls/songsiqi/postcss-adaptive.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/songsiqi/postcss-adaptive
-[downloads-image]: http://img.shields.io/npm/dm/postcss-adaptive.svg?style=flat-square
-[downloads-url]: https://npmjs.org/package/postcss-adaptive
+* [postcss-adaptive](https://github.com/songsiqi/postcss-adaptive)
+* [npm-image]: https://img.shields.io/npm/v/postcss-adaptive.svg?style=flat-square
+* [npm-url]: https://npmjs.org/package/postcss-adaptive
+* [travis-image]: https://img.shields.io/travis/songsiqi/postcss-adaptive.svg?style=flat-square
+* [travis-url]: https://travis-ci.org/songsiqi/postcss-adaptive
+* [coveralls-image]: https://img.shields.io/coveralls/songsiqi/postcss-adaptive.svg?style=flat-square
+* [coveralls-url]: https://coveralls.io/r/songsiqi/postcss-adaptive
+* [downloads-image]: http://img.shields.io/npm/dm/postcss-adaptive.svg?style=flat-square
+* [downloads-url]: https://npmjs.org/package/postcss-adaptive
 
 ## Table of Contents
 
