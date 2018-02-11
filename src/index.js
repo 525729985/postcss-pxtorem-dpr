@@ -4,7 +4,7 @@ import Adaptive from './adaptive'
 
 export default postcss.plugin(pkg.name, (options) => {
   return (css, result) => {
-    if (options.exclude) {
+    if (options && options.exclude) {
       if (Object.prototype.toString.call(options.exclude) !== '[object RegExp]') {
         throw new Error('options.exclude should be RegExp!')
       }
