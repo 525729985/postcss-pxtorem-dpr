@@ -18,7 +18,7 @@
     "test:babel": "babel src --out-dir lib",
     "test:lint": "eslint src",
     "test:mocha": "mocha",
-    "test": "npm run test:babel && npm run test:lint && npm run test:mocha",
+    "test": "npm run test:babel && npm run test:mocha",
     "cover": "isparta cover --report text --report lcov _mocha -- --reporter dot"
   },
   "dependencies": {
