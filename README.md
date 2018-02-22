@@ -119,6 +119,7 @@ Config:
     * Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
     * Use `!` to not match a property. Example: `['*', '!letter-spacing']`
     * Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']`
+* `exclude`: reg, Use RegExp only in test and for filename matching (default: null)
 ## License
 
 MIT
