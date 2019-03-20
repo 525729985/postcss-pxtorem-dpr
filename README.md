@@ -114,27 +114,27 @@ Config:
 * `hairlineClass`: string, class name of 1px border (default 'hairlines')
 * `autoRem`: boolean, whether to transform to rem unit (default: true)
 * `propList`: array, The properties that can use transform (default: ['*'])
-    Values need to be exact matches.
-    Use wildcard * to enable all properties. Example: ['*']
-    Use * at the start or end of a word. (['*position*'] will match background-position-y)
-    Use ! to not match a property. Example: ['*', '!letter-spacing']
-    Combine the "not" prefix with the other prefixes. Example: ['*', '!font*']
+  - Values need to be exact matches.
+  - Use wildcard * to enable all properties. Example: ['*']
+  - Use * at the start or end of a word. (['*position*'] will match background-position-y)
+  - Use ! to not match a property. Example: ['*', '!letter-spacing']
+  - Combine the "not" prefix with the other prefixes. Example: ['*', '!font*']
 * `pxPropList`: array, The properties that can change from px to dpr (default: ['font*', 'border*', '!border-radius'])
-    Values need to be exact matches.
-    Use wildcard * to enable all properties. Example: ['*']
-    Use * at the start or end of a word. (['*position*'] will match background-position-y)
-    Use ! to not match a property. Example: ['*', '!letter-spacing']
-    Combine the "not" prefix with the other prefixes. Example: ['*', '!font*']
-    
+  - Values need to be exact matches.
+   - Use wildcard * to enable all properties. Example: ['*']
+   - Use * at the start or end of a word. (['*position*'] will match background-position-y)
+   - Use ! to not match a property. Example: ['*', '!letter-spacing']
+   - Combine the "not" prefix with the other prefixes. Example: ['*', '!font*']
+
 * `selectorBlackList`:  array, The selectors to ignore and leave as px. (default: [])
-    If value is string, it checks to see if selector contains the string.
-        ['body'] will match .body-class
-    If value is regexp, it checks to see if the selector matches the regexp.
-        [/^body$/] will match body but not .body
+  -  If value is string, it checks to see if selector contains the string.
+      -  ['body'] will match .body-class
+  -  If value is regexp, it checks to see if the selector matches the regexp.
+      -  [/^body$/] will match body but not .body
 
 * `exclude`: array, The selectors to ignore file. (default: null)
-    If value is string, it checks to see if selector contains the string. Example: ['node_modules']
-    If value is regexp, it checks to see if the selector matches the regexp.
+  - If value is string, it checks to see if selector contains the string. Example: ['node_modules']
+  - If value is regexp, it checks to see if the selector matches the regexp.
 
 ## License
 
