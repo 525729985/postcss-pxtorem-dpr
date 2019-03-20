@@ -1,53 +1,8 @@
 import css from 'css'
-import filterPropList from './lib/filter-prop-list'
+import { createPropListMatcher, blacklistedSelector } from './utils'
 
 const PX_REG = /\b(\d+(\.\d+)?)px\b/
 const PX_GLOBAL_REG = new RegExp(PX_REG.source, 'g')
-
-function createPropListMatcher (propList) {
-  const hasWild = propList.indexOf('*') > -1
-  const matchAll = (hasWild && propList.length === 1)
-  const lists = {
-    exact: filterPropList.exact(propList),
-    contain: filterPropList.contain(propList),
-    startWith: filterPropList.startWith(propList),
-    endWith: filterPropList.endWith(propList),
-    notExact: filterPropList.notExact(propList),
-    notContain: filterPropList.notContain(propList),
-    notStartWith: filterPropList.notStartWith(propList),
-    notEndWith: filterPropList.notEndWith(propList)
-  }
-  return function (prop) {
-    if (matchAll) return true
-    return (
-      (
-        hasWild ||
-        lists.exact.indexOf(prop) > -1 ||
-        lists.contain.some(function (m) {
-          return prop.indexOf(m) > -1
-        }) ||
-        lists.startWith.some(function (m) {
-          return prop.indexOf(m) === 0
-        }) ||
-        lists.endWith.some(function (m) {
-          return prop.indexOf(m) === prop.length - m.length
-        })
-      ) &&
-      !(
-        lists.notExact.indexOf(prop) > -1 ||
-        lists.notContain.some(function (m) {
-          return prop.indexOf(m) > -1
-        }) ||
-        lists.notStartWith.some(function (m) {
-          return prop.indexOf(m) === 0
-        }) ||
-        lists.notEndWith.some(function (m) {
-          return prop.indexOf(m) === prop.length - m.length
-        })
-      )
-    )
-  }
-}
 
 export default class Adaptive {
   constructor (options) {
@@ -57,10 +12,13 @@ export default class Adaptive {
       remPrecision: 6,            // rem value precision (default: 6)
       hairlineClass: 'hairlines', // class name of 1px border (default: 'hairlines')
       autoRem: true,              // whether to transform to rem unit (default: true)
-      pxPropList: ['font*', 'border*', '!border-radius']
+      pxPropList: ['font*', 'border*', '!border-radius'],
+      propList: ['*'],
+      selectorBlackList: [/^body$/]
     }
     this.config = Object.assign({}, defaultConfig, options)
     this.checkPxProp = createPropListMatcher(this.config.pxPropList)
+    this.satisfyPropList = createPropListMatcher(this.config.propList)
   }
 
   parse (code) {
@@ -74,18 +32,22 @@ export default class Adaptive {
 
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i]
-
-      if (rule.type === 'media') {
+      const ruleType = rule.type
+      if (rule.selectors && blacklistedSelector(this.config.selectorBlackList, rule.selectors.join(' '))) {
+        continue
+      }
+      if (ruleType === 'media' || ruleType === 'supports') {
         this._processRules(rule.rules) // recursive invocation while dealing with media queries
         continue
       }
-      else if (rule.type === 'keyframes') {
+      else if (ruleType === 'keyframes') {
         this._processRules(rule.keyframes, true) // recursive invocation while dealing with keyframes
         continue
       }
-      else if (rule.type !== 'rule' && rule.type !== 'keyframe') {
+      else if (ruleType !== 'rule' && ruleType !== 'keyframe') {
         continue
       }
+
       // generate a new rule which has `hairline` class
       let newRule = {}
       if (!noDealHairline) {
@@ -99,8 +61,10 @@ export default class Adaptive {
       const declarations = rule.declarations
       for (let j = 0; j < declarations.length; j++) {
         const declaration = declarations[j]
-        // need transform: declaration && has 'px'
-        if (declaration.type === 'declaration' && PX_REG.test(declaration.value)) {
+        if (!this.satisfyPropList(declaration.property)) {
+          continue
+        }
+        else if (declaration.type === 'declaration' && PX_REG.test(declaration.value)) {
           const nextDeclaration = declarations[j + 1]
           const originDeclarationValue = declaration.value
           let mode

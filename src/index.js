@@ -1,16 +1,16 @@
 import postcss from 'postcss'
 import pkg from '../package.json'
 import Adaptive from './adaptive'
+import { blacklistedSelector } from './utils'
 
 export default postcss.plugin(pkg.name, (options) => {
+  let blacklist = []
+  if (options && options.exclude) {
+    blacklist = options.exclude instanceof Array ? options.exclude : [options.exclude]
+  }
   return (css, result) => {
-    if (options && options.exclude) {
-      if (Object.prototype.toString.call(options.exclude) !== '[object RegExp]') {
-        throw new Error('options.exclude should be RegExp!')
-      }
-      if (options.exclude.test(css.source.input.file)) {
-        return (result.root = css)
-      }
+    if (blacklistedSelector(blacklist, css.source.input.file)) {
+      return (result.root = css)
     }
     const adaptiveIns = new Adaptive(options)
     const output = adaptiveIns.parse(css.toString())

@@ -16,7 +16,7 @@ describe('integration', function () {
   it('normal', function () {
     var fixture = readFile('test/fixture.css')
     var expected = readFile('test/expected.css')
-    var output = postcss().use(adaptive()).process(fixture).css
+    var output = postcss().use(adaptive({ autoRem: false })).process(fixture).css
     expect(output).is.a.string
     expect(output).eql(expected)
   })
@@ -32,8 +32,13 @@ describe('integration', function () {
   it('rem prop list', function () {
     var fixture = readFile('test/fixture-px-list.css')
     var expected = readFile('test/expected-px-list.css')
-    var output = postcss().use(adaptive({ autoRem: true, propList: [ '*', '!html', '!body', '!border*', 'border-radius'] })).process(fixture).css
+    var output = postcss().use(adaptive({
+      autoRem: true,
+      propList: [ '*', '!border-radius'],
+      selectorBlackList: [/^body$/]
+    })).process(fixture).css
     expect(output).is.a.string
     expect(output).eql(expected)
   })
+
 })
