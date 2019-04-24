@@ -14,7 +14,7 @@ export default class Adaptive {
       autoRem: true,              // whether to transform to rem unit (default: true)
       pxPropList: ['font*', 'border*', '!border-radius'],
       propList: ['*'],
-      selectorBlackList: [/^body$/]
+      selectorBlackList: []
     }
     this.config = Object.assign({}, defaultConfig, options)
     this.checkPxProp = createPropListMatcher(this.config.pxPropList)
