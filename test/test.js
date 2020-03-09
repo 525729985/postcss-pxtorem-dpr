@@ -1,6 +1,6 @@
+var postcss = require('postcss')
 var fs = require('fs')
 var chai = require('chai')
-var postcss = require('postcss')
 var expect = chai.expect
 var adaptive = require('../')
 
@@ -14,31 +14,29 @@ function readFile (filepath) {
 describe('integration', function () {
 
   it('normal', function () {
-    var fixture = readFile('test/fixture.css')
-    var expected = readFile('test/expected.css')
+    var fixture = readFile('test/normal/fixture.css')
+    var expected = readFile('test/normal/expected.css')
+    var output = postcss().use(adaptive()).process(fixture).css
+    expect(output).is.a.string
+    expect(output).eql(expected)
+  })
+
+  it('auto px', function () {
+    var fixture = readFile('test/autopx/fixture.css')
+    var expected = readFile('test/autopx/expected.css')
     var output = postcss().use(adaptive({ autoRem: false })).process(fixture).css
     expect(output).is.a.string
     expect(output).eql(expected)
   })
 
-  it('auto rem', function () {
-    var fixture = readFile('test/fixture-autorem.css')
-    var expected = readFile('test/expected.css')
-    var output = postcss().use(adaptive({ autoRem: true })).process(fixture).css
-    expect(output).is.a.string
-    expect(output).eql(expected)
-  })
-
   it('rem prop list', function () {
-    var fixture = readFile('test/fixture-px-list.css')
-    var expected = readFile('test/expected-px-list.css')
+    var fixture = readFile('test/autorem/fixture.css')
+    var expected = readFile('test/autorem/expected.css')
     var output = postcss().use(adaptive({
-      autoRem: true,
       propList: [ '*', '!border-radius'],
       selectorBlackList: [/^body$/]
     })).process(fixture).css
     expect(output).is.a.string
     expect(output).eql(expected)
   })
-
 })

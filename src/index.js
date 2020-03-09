@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import pkg from '../package.json'
-import Adaptive from './adaptive'
 import { blacklistedSelector } from './utils'
+import Adaptive from 'pxtorem-dpr'
 
 export default postcss.plugin(pkg.name, (options) => {
   let blacklist = []
