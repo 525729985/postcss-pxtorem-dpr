@@ -1,7 +1,7 @@
 {
   "name": "postcss-pxtorem-dpr",
   "description": "A CSS post-processor that converts px to rem.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/525729985/postcss-pxtorem-dpr"
@@ -24,7 +24,7 @@
   "dependencies": {
     "css": "^2.2.1",
     "postcss": "^6.0.8",
-    "pxtorem-dpr": "^0.0.1"
+    "pxtorem-dpr": "^0.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",

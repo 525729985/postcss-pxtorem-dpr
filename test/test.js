@@ -30,8 +30,8 @@ describe('integration', function () {
   })
 
   it('rem prop list', function () {
-    var fixture = readFile('test/autorem/fixture.css')
-    var expected = readFile('test/autorem/expected.css')
+    var fixture = readFile('test/px-list/fixture.css')
+    var expected = readFile('test/px-list/expected.css')
     var output = postcss().use(adaptive({
       propList: [ '*', '!border-radius'],
       selectorBlackList: [/^body$/]
